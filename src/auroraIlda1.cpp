@@ -1,79 +1,56 @@
 #include "auroraIlda1.h"
 
-//--------------------------------------------------------------
 void auroraIlda1::setup(){
-    ofBackground(0);
     etherdream.setup();
     etherdream.setPPS(30000);
-
-    color1 = ofColor(0, 0, ofRandom( 128, 255 ) );
-    color2 = ofColor(ofRandom( 128, 255 ), 0, 0 );
-    color3 = ofColor(0, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
-    color4 = ofColor(0, 0, ofRandom( 128, 255 ) );
     
-    color1.setBrightness(255);
-    color2.setBrightness(255);
-    color3.setBrightness(255);
-    color4.setBrightness(255);
+    CenterX = 0.5;
+    CenterY = 0.5;
 
-    
-    //color1 = color2 = color3 = color4 = ofColor(255, 255, 255);
+    white = ofColor(255, 255, 255);
+    color1 = ofColor(64, 64, ofRandom( 128, 255 ) );
+    color2 = ofColor(ofRandom( 128, 255 ), 64, 64 );
+    color3 = ofColor(64, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
+    color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
 }
 
-//--------------------------------------------------------------
 void auroraIlda1::update(){
-    //mimic heartbeat
-    /*
-    if (ofGetFrameNum() % 45 < 5)
-        scale = 0.8;
-    else
-        scale = 1.0;
-     */
-
-}
-
-void auroraIlda1::drawRandomCircle(float r0, float r1) {
-    ofPolyline line;
-    vector<ofPoint> points;
+    beat();
     
-    for (float j=0; j < TWO_PI+0.1; j+= 0.05) {
-        float r = 0.35 * scale * ofRandom(r0, r1);
-        float x = r * cos(j) + 0.5;//+ ofGetWidth()/2;
-        float y = r * sin(j) + 0.5;//+ ofGetHeight()/2;
-        
-        //line.addVertex(x, y); //pointy
-        line.curveTo(x, y); //curvy
-        //points.push_back( ofPoint(x, y));
+    int newScene = getSceneNumber();
+
+    if (newScene != currentScene) //transition?
+    {
+        //triggerAudioFor(newScene);
+        currentScene = newScene;
     }
-    
-    //cout << "verts: " << line.getVertices().size();
-    
-    //line.draw();
-
-    //ofPolyline line2(points);
-    ildaFrame.addPoly(line);
-    
 }
 
-//--------------------------------------------------------------
 void auroraIlda1::draw(){
+    ofBackground(0);
     ildaFrame.clear();
 
-    //ofBackground(0);
-    //ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
-    //ofScale(200*scale, 200*scale);
-    
-    ofSetColor(color1);
-    drawRandomCircle(0.85, 0.85);
-    
-    ofSetColor(color2);
-    drawRandomCircle(0.85, 1.0);
-    
-    ofSetColor(color3);
-    drawRandomCircle(1.0, 1.25);
-    
-    ofSetColor(color4);
-    drawRandomCircle(1.25, 1.25);
+    switch (currentScene) {
+        case 1:
+            drawScene1();
+            break;
+
+        case 2:
+            drawScene2();
+            break;
+
+        case 3:
+            drawScene3();
+            break;
+
+        case 4:
+            drawScene4();
+            break;
+
+        default:
+            ofBackground(0);
+            break;
+    }
 
     ildaFrame.update();
     ildaFrame.draw(0, 0, ofGetWidth(), ofGetHeight());
@@ -83,47 +60,69 @@ void auroraIlda1::draw(){
     //ofDrawBitmapString(ildaFrame.getString(), 10, 30);
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::keyPressed(int key){
+void auroraIlda1::drawScene1(){
+    ofSetColor(white);
 
+    ofPolyline circle;
+    float radius = 0.05 * scale;
+    circle.arc(CenterX, CenterY,
+               radius, radius, 0, 360, 100);
+    ildaFrame.addPoly(circle);
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::keyReleased(int key){
+void auroraIlda1::drawScene2(){
+    ofSetColor(color2);
 
+    float radius = 0.10 * scale;
+    ofPolyline circle1, circle2;
+    circle1.arc(CenterX + 0.25, CenterY + 0.25,
+                radius, radius, 0, 360, 100);
+    circle2.arc(CenterX - 0.25, CenterY - 0.25,
+                radius, radius, 0, 360, 100);
+
+    ildaFrame.addPoly(circle1);
+    ildaFrame.addPoly(circle2);
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::mouseMoved(int x, int y ){
+void auroraIlda1::drawScene3(){
+    ofSetColor(color3);
+    
+    int numCircles = 4;
+    float radius = 0.05;
+    int centers[4][2] = {{-1, 1}, {1, 1}, {1, -1}, {-1, -1}};
+    
+    for (int i=0; i< numCircles; i++)
+    {
+        ofPolyline circle;
+        circle.arc(CenterX + centers[i][0]*4*radius,
+                   CenterY + centers[i][1]*4*radius,
+                   radius * scale, radius * scale, 0, 360, 100);
 
+        ildaFrame.addPoly(circle);
+    }
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::mouseDragged(int x, int y, int button){
-
+void auroraIlda1::drawScene4(){
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::mousePressed(int x, int y, int button){
-
+//simulate heartbeat
+void auroraIlda1::beat(){
+    int heartRate = 650, beatLength = 20;
+    if (ofGetElapsedTimeMillis() % heartRate < beatLength)
+        scale = 0.95;
+    else
+        scale = 1.00;
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::mouseReleased(int x, int y, int button){
-
+int auroraIlda1::getSceneNumber(){
+    int sceneTimesLength = sizeof(sceneTimes)/sizeof(sceneTimes[0]);
+    for (int i=sceneTimesLength-1; i >= 0; i--)
+    {
+        if (ofGetElapsedTimeMillis() >= sceneTimes[i])
+            return i;
+    }
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
 void auroraIlda1::gotMessage(ofMessage msg){
-
 }
 
-//--------------------------------------------------------------
-void auroraIlda1::dragEvent(ofDragInfo dragInfo){ 
-
-}

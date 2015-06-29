@@ -6,24 +6,29 @@
 class auroraIlda1 : public ofBaseApp{
 
 	public:
-		void setup();
-		void update();
-		void draw();
-
-		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
-        void drawRandomCircle(float rx, float ry);
+    ofxIlda::Frame ildaFrame;
+    ofxEtherdream etherdream;
     
-        float scale = 1.0;
-        ofColor color1, color2, color3, color4;
-        ofxIlda::Frame ildaFrame;   // stores and manages ILDA frame drawings
-        ofxEtherdream etherdream;   // interface to the etherdream device
+    float CenterX, CenterY;
 
+    float scale = 1.0;
+    ofColor white, color1, color2, color3, color4;
+    int currentScene = 0;
+    
+    const int sceneTimes[5] = {0, 1000, 3000, 6000, 9000};
+    
+    void setup();
+    void update();
+    void draw();
+    
+    //scenes
+    int getSceneNumber();
+    void drawScene1();
+    void drawScene2();
+    void drawScene3();
+    void drawScene4();
+    
+    void beat();
+    
+    void gotMessage(ofMessage msg);
 };
