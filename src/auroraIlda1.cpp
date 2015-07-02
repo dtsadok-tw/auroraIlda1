@@ -24,11 +24,15 @@ void auroraIlda1::update(){
         //triggerAudioFor(newScene);
         currentScene = newScene;
     }
+
+    ildaFrame.clear();
+
+    //for (int i=0; i<4; i++)
+    //    curves[i]->clear();
 }
 
 void auroraIlda1::draw(){
     ofBackground(0);
-    ildaFrame.clear();
 
     switch (currentScene) {
         case 1:
@@ -63,25 +67,19 @@ void auroraIlda1::draw(){
 void auroraIlda1::drawScene1(){
     ofSetColor(white);
 
-    ofPolyline circle;
-    float radius = 0.05 * scale;
-    circle.arc(CenterX, CenterY,
-               radius, radius, 0, 360, 100);
-    ildaFrame.addPoly(circle);
+    genCircle(&curves[0], 0.35, CenterX, CenterY, Fuzzy);
+    ildaFrame.addPoly(curves[0]);
 }
 
 void auroraIlda1::drawScene2(){
     ofSetColor(color2);
 
     float radius = 0.10 * scale;
-    ofPolyline circle1, circle2;
-    circle1.arc(CenterX + 0.25, CenterY + 0.25,
-                radius, radius, 0, 360, 100);
-    circle2.arc(CenterX - 0.25, CenterY - 0.25,
-                radius, radius, 0, 360, 100);
 
-    ildaFrame.addPoly(circle1);
-    ildaFrame.addPoly(circle2);
+    genCircle(&curves[0], radius, CenterX + 0.25, CenterX + 0.25, Fuzzy);
+    ildaFrame.addPoly(curves[0]);
+    genCircle(&curves[1], radius, CenterX - 0.25, CenterX - 0.25, Fuzzy);
+    ildaFrame.addPoly(curves[1]);
 }
 
 void auroraIlda1::drawScene3(){
@@ -93,12 +91,11 @@ void auroraIlda1::drawScene3(){
     
     for (int i=0; i< numCircles; i++)
     {
-        ofPolyline circle;
-        circle.arc(CenterX + centers[i][0]*4*radius,
-                   CenterY + centers[i][1]*4*radius,
-                   radius * scale, radius * scale, 0, 360, 100);
+        genCircle(&curves[i], radius,
+                       CenterX + centers[i][0]*4*radius,
+                       CenterY + centers[i][1]*4*radius, Fuzzy);
 
-        ildaFrame.addPoly(circle);
+        ildaFrame.addPoly(curves[i]);
     }
 }
 
@@ -107,9 +104,8 @@ void auroraIlda1::drawScene4(){
 
 //simulate heartbeat
 void auroraIlda1::beat(){
-    int heartRate = 650, beatLength = 20;
-    if (ofGetElapsedTimeMillis() % heartRate < beatLength)
-        scale = 0.95;
+    if (ofGetElapsedTimeMillis() % HeartRate < BeatLength)
+        scale = 0.85;
     else
         scale = 1.00;
 }
@@ -118,11 +114,35 @@ int auroraIlda1::getSceneNumber(){
     int sceneTimesLength = sizeof(sceneTimes)/sizeof(sceneTimes[0]);
     for (int i=sceneTimesLength-1; i >= 0; i--)
     {
-        if (ofGetElapsedTimeMillis() >= sceneTimes[i])
+        if (ofGetElapsedTimeMillis() % LoopTime >= sceneTimes[i])
             return i;
     }
+}
+
+void auroraIlda1::genCircle(ofPolyline *curve,
+                            float _r, float _x, float _y,
+                            bool fuzzy, int resolution)
+{
+    curve->clear();
+
+    for (int i=0; i< resolution; i++) {
+        float j = float(i)/resolution * TWO_PI;
+        float r = _r * scale;
+        if (fuzzy) r *= getAmplitude();
+        float x = _x + r * cos(j);
+        float y = _y + r * sin(j);
+
+        curve->curveTo(x, y);
+    }
+}
+
+float auroraIlda1::getAmplitude() {
+    return ofRandom(0.95, 1.05);
 }
 
 void auroraIlda1::gotMessage(ofMessage msg){
 }
 
+void auroraIlda1::keyReleased(int key) {
+    if (key == ' ') Fuzzy = !Fuzzy;
+}

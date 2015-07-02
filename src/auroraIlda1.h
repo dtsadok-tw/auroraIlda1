@@ -9,6 +9,8 @@ class auroraIlda1 : public ofBaseApp{
     ofxIlda::Frame ildaFrame;
     ofxEtherdream etherdream;
 
+    ofPolyline curves[4];
+
     float CenterX, CenterY;
 
     float scale = 1.0;
@@ -16,12 +18,16 @@ class auroraIlda1 : public ofBaseApp{
     int currentScene = 0;
 
     const int sceneTimes[5] = {0, 1000, 3000, 6000, 9000};
+    const int LoopTime = 12000;
+
+    const int HeartRate = 650, BeatLength = 20;
+
+    bool Fuzzy = true;
 
     void setup();
     void update();
     void draw();
 
-    //scenes
     int getSceneNumber();
     void drawScene1();
     void drawScene2();
@@ -29,6 +35,10 @@ class auroraIlda1 : public ofBaseApp{
     void drawScene4();
 
     void beat();
-
+    void genCircle(ofPolyline *curve,
+                   float r, float x, float y,
+                   bool fuzzy = false, int resolution = 1000);
+    float getAmplitude();
     void gotMessage(ofMessage msg);
+    void keyReleased(int key);
 };
