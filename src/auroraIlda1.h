@@ -43,6 +43,10 @@ class auroraIlda1 : public ofBaseApp{
     
     // audio
     
+    // simplest - just play audio, and play images, unlinked
+    
+    ofSoundPlayer fullSequenceBounce;
+    
     ofSoundPlayer aviPlayer;
     ofSoundPlayer sofyPlayer;
     ofSoundPlayer danPlayer;

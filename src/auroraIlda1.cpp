@@ -15,6 +15,10 @@ void auroraIlda1::setup(){
 }
 
 void auroraIlda1::setupAudio(){
+    
+    fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
+    fullSequenceBounce.setVolume(1.0f);
+    fullSequenceBounce.play();
     aviPlayer.loadSound("sounds/Avi Heart#03.aif");
     aviPlayer.setVolume(1.0f);
     aviPlayer.setMultiPlay(true);
@@ -78,6 +82,7 @@ void auroraIlda1::draw(){
 
     switch (currentScene) {
         case 1:
+            fullSequenceBounce.play();
             drawScene1();
             break;
 
