@@ -12,7 +12,7 @@ void auroraIlda1::setup(){
     color2 = ofColor(ofRandom( 128, 255 ), 64, 64 );
     color3 = ofColor(64, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
-    // fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
+    fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
     // fullSequenceBounce.setVolume(1.0f);
     // setupAudio();
 
@@ -29,7 +29,7 @@ void auroraIlda1::setup(){
     
     int bufferSize = 256;
     
-    
+
     left.assign(bufferSize, 0.0);
     right.assign(bufferSize, 0.0);
     volHistory.assign(400, 0.0);
@@ -40,6 +40,7 @@ void auroraIlda1::setup(){
     scaledVol       = 0.0;
 
     soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
+    soundStream.setInput();
 
 }
 
@@ -278,7 +279,7 @@ void auroraIlda1::keyReleased(int key) {
 }
 
 //--------------------------------------------------------------
-void ofApp::audioIn(float * input, int bufferSize, int nChannels){  
+void auroraIlda1::audioIn(float * input, int bufferSize, int nChannels){
     
     float curVol = 0.0;
     
