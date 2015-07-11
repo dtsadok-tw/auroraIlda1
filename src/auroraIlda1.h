@@ -42,6 +42,21 @@ class auroraIlda1 : public ofBaseApp{
     void gotMessage(ofMessage msg);
     
     // audio
+
+    // more complicated -- soundStream 
+    ofSoundStream soundStream;
+    void audioIn(float * input, int bufferSize, int nChannels); 
+    
+    vector <float> left;
+    vector <float> right;
+    vector <float> volHistory;
+    
+    int     bufferCounter;
+    int     drawCounter;
+    
+    float smoothedVol;
+    float scaledVol;
+    
     
     // simplest - just play audio, and play images, unlinked
     
