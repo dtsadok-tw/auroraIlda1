@@ -15,8 +15,11 @@ void auroraIlda1::setup(){
     fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
     // fullSequenceBounce.setVolume(1.0f);
 
-    if (sample.load("sounds/hi_res_w_hearts.wav")) {
+    if (sample.load("sounds/audacity_redo_export.wav")) {
         cout<< "sample has loaded" << endl;
+        cout<< "what is the play state?" << endl;
+        cout<< sample.getIsPlaying() << endl;
+        
     }
     sample.setLooping(true);
     // 0 output channels, 
@@ -55,7 +58,8 @@ void auroraIlda1::setup(){
 void auroraIlda1::setupAudio(){
     // fullSequenceBounce.play();
     sample.play();
-    cout << "is lloadEd? ?";
+    cout << "is playing? ?";
+    cout << sample.getIsPlaying() << endl;
     cout << fullSequenceBounce.isLoaded();
 //    fullSequenceBounce.play();
     
