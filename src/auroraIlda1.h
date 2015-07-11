@@ -17,8 +17,8 @@ class auroraIlda1 : public ofBaseApp{
     ofColor white, color1, color2, color3, color4;
     int currentScene = 0;
 
-    const int sceneTimes[5] = {0, 1000, 3000, 6000, 9000};
-    const int LoopTime = 12000;
+    const int sceneTimes[5] = {0, 19000, 29000, 41000, 51000};
+    const int LoopTime = 1200000;
 
     const int HeartRate = 650, BeatLength = 20;
 
@@ -40,5 +40,25 @@ class auroraIlda1 : public ofBaseApp{
                    bool fuzzy = false, int resolution = 1000);
     float getAmplitude();
     void gotMessage(ofMessage msg);
+    
+    // audio
+    
+    // simplest - just play audio, and play images, unlinked
+    
+    ofSoundPlayer fullSequenceBounce;
+    
+    ofSoundPlayer aviPlayer;
+    ofSoundPlayer sofyPlayer;
+    ofSoundPlayer danPlayer;
+    ofSoundPlayer normPlayer;
+    
+    void setupAudio();
+    void triggerAudioFor(int sceneNumber);
+    
+    float * val;
+    float * fftSmoothed;
+    int nBandsToGet;
+    
+    float averageFft();
     void keyReleased(int key);
 };
