@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxEtherdream.h"
+#include "Sample.h"
 
 class auroraIlda1 : public ofBaseApp{
 
@@ -44,6 +45,8 @@ class auroraIlda1 : public ofBaseApp{
     // audio
 
     // more complicated -- soundStream 
+
+    Sample sample;
     ofSoundStream soundStream;
     void audioIn(float * input, int bufferSize, int nChannels); 
     
@@ -56,6 +59,7 @@ class auroraIlda1 : public ofBaseApp{
     
     float smoothedVol;
     float scaledVol;
+    vector<MiniMaxima> waveForm;
     
     
     // simplest - just play audio, and play images, unlinked

@@ -14,15 +14,17 @@ void auroraIlda1::setup(){
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
     fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
     // fullSequenceBounce.setVolume(1.0f);
-    // setupAudio();
+    setupAudio();
 
+    sample.load("sounds/hi_res_w_hearts.wav");
+    sample.setLooping(false);
     // 0 output channels, 
     // 2 input channels
     // 44100 samples per second
     // 256 samples per buffer
     // 4 num buffers (latency)
     
-    soundStream.listDevices();
+//    soundStream.listDevices();
     
     //if you want to set a different device id 
     //soundStream.setDeviceID(0); //bear in mind the device id corresponds to all audio devices, including  input-only and output-only devices.
@@ -39,13 +41,18 @@ void auroraIlda1::setup(){
     smoothedVol     = 0.0;
     scaledVol       = 0.0;
 
-    soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
+//     soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
 //    soundStream.setInput();
+    ofSoundStreamSetup(2,0,this, 44100,256, 4);
+    
+        sample.generateWaveForm(&waveForm);
+
 
 }
 
 void auroraIlda1::setupAudio(){
-    fullSequenceBounce.play();
+    // fullSequenceBounce.play();
+    sample.play();
     cout << "is lloadEd? ?";
     cout << fullSequenceBounce.isLoaded();
 //    fullSequenceBounce.play();
@@ -89,6 +96,10 @@ void auroraIlda1::update(){
     {
 //        triggerAudioFor(newScene);
         currentScene = newScene;
+        cout << "check if loaded";
+        cout << sample.getIsLoaded();
+        cout << "check is playing";
+        cout << sample.getIsPlaying();
     }
 
 //    val = ofSoundGetSpectrum(nBandsToGet); // request 128 values for fft
