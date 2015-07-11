@@ -14,6 +14,37 @@ void auroraIlda1::setup(){
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
 }
 
+void auroraIlda1::setupAudio(){
+    aviPlayer.loadSound("sounds/Avi Heart#03.aif");
+    aviPlayer.setVolume(1.0f);
+    aviPlayer.setMultiPlay(false);
+    aviPlayer.setPan(0.4);
+    
+    sofyPlayer.loadSound("sounds/Sofy Heart#01.aif");
+    sofyPlayer.setVolume(1.0f);
+    sofyPlayer.setMultiPlay(false);
+    sofyPlayer.setPosition(0.5);
+    sofyPlayer.setPan(0.0);
+    
+    danPlayer.loadSound("sounds/Pedro Heart#05.aif");
+    danPlayer.setVolume(1.0f);
+    danPlayer.setMultiPlay(false);
+    danPlayer.setPan(-1.0);
+    
+    normPlayer.loadSound("sounds/Norm#02.aif");
+    normPlayer.setVolume(1.0f);
+    normPlayer.setMultiPlay(false);
+    normPlayer.setPan(-0.4);
+    
+    fftSmoothed = new float[8192];
+    for (int i = 0; i < 8192; i++){
+        fftSmoothed[i] = 0;
+    }
+    
+    nBandsToGet = 128;
+    
+}
+
 void auroraIlda1::update(){
     beat();
     
@@ -21,14 +52,25 @@ void auroraIlda1::update(){
 
     if (newScene != currentScene) //transition?
     {
-        //triggerAudioFor(newScene);
+        triggerAudioFor(newScene);
         currentScene = newScene;
     }
+
+    val = ofSoundGetSpectrum(nBandsToGet); // request 128 values for fft
+    for (int i = 0;i < nBandsToGet; i++){
+        // let the smoothed value sink to zero:
+        fftSmoothed[i] *= 0.96f;
+        // take the max, either the smoothed or the incoming:
+        if (fftSmoothed[i] < val[i]) fftSmoothed[i] = val[i];
+        
+    }
+
 
     ildaFrame.clear();
 
     //for (int i=0; i<4; i++)
     //    curves[i]->clear();
+
 }
 
 void auroraIlda1::draw(){
@@ -143,6 +185,48 @@ float auroraIlda1::getAmplitude() {
 void auroraIlda1::gotMessage(ofMessage msg){
 }
 
+void auroraIlda1::triggerAudioFor(int sceneNumber){
+    switch (sceneNumber) {
+        case 1:
+            sofyPlayer.play();
+            cout << "check avg once \n";
+            cout << averageFft();
+            break;
+        case 2:
+            danPlayer.play();
+            cout << "check avg again \n";
+            cout << averageFft();
+            break;
+        case 3:
+            aviPlayer.play();
+            cout << "check avg once agin \n";
+            cout << averageFft();
+            break;
+        case 4:
+            normPlayer.play();
+            cout << "check avg once \n";
+            cout << averageFft();
+            break;
+            
+        default:
+            break;
+    }
+}
+
+float auroraIlda1::averageFft(){
+    if (fftSmoothed){ cout << "true \n";}
+    float sum = 0;
+    for (int i = 0; i < 8192; i++){
+//        cout << fftSmoothed[i];
+        sum += fftSmoothed[i];
+    }
+    float avg = sum / 8192;
+    cout << avg;
+    return avg;
+}
+
+
 void auroraIlda1::keyReleased(int key) {
     if (key == ' ') Fuzzy = !Fuzzy;
 }
+

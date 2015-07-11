@@ -40,5 +40,21 @@ class auroraIlda1 : public ofBaseApp{
                    bool fuzzy = false, int resolution = 1000);
     float getAmplitude();
     void gotMessage(ofMessage msg);
+    
+    // audio
+    
+    ofSoundPlayer aviPlayer;
+    ofSoundPlayer sofyPlayer;
+    ofSoundPlayer danPlayer;
+    ofSoundPlayer normPlayer;
+    
+    void setupAudio();
+    void triggerAudioFor(int sceneNumber);
+    
+    float * val;
+    float * fftSmoothed;
+    int nBandsToGet;
+    
+    float averageFft();
     void keyReleased(int key);
 };
