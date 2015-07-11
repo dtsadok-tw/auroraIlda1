@@ -40,7 +40,7 @@ void auroraIlda1::setup(){
     scaledVol       = 0.0;
 
     soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
-    soundStream.setInput();
+//    soundStream.setInput();
 
 }
 
