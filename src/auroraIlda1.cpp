@@ -12,8 +12,8 @@ void auroraIlda1::setup(){
     color2 = ofColor(ofRandom( 128, 255 ), 64, 64 );
     color3 = ofColor(64, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
-    fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
-    fullSequenceBounce.setVolume(1.0f);
+    fullSequenceBounce.loadSound("sounds/hi_res_no_hearts.aif");
+    fullSequenceBounce.setVolume(0.25f);
     setupAudio();
 }
 
@@ -21,7 +21,6 @@ void auroraIlda1::setupAudio(){
     fullSequenceBounce.play();
     cout << "is lloadEd? ?";
     cout << fullSequenceBounce.isLoaded();
-//    fullSequenceBounce.play();
     
     aviPlayer.loadSound("sounds/Avi Heart#03.aif");
     aviPlayer.setVolume(1.0f);
@@ -60,24 +59,11 @@ void auroraIlda1::update(){
 
     if (newScene != currentScene) //transition?
     {
-//        triggerAudioFor(newScene);
         currentScene = newScene;
+        triggerAudioFor(currentScene);
     }
 
-//    val = ofSoundGetSpectrum(nBandsToGet); // request 128 values for fft
-//    for (int i = 0;i < nBandsToGet; i++){
-//        // let the smoothed value sink to zero:
-//        fftSmoothed[i] *= 0.96f;
-//        // take the max, either the smoothed or the incoming:
-//        if (fftSmoothed[i] < val[i]) fftSmoothed[i] = val[i];
-//        
-//    }
-
-
     ildaFrame.clear();
-
-    //for (int i=0; i<4; i++)
-    //    curves[i]->clear();
 
 }
 
@@ -126,13 +112,26 @@ void auroraIlda1::drawScene2(){
 
     float radius = 0.10 * scale;
 
-    genCircle(&curves[0], radius, CenterX + 0.25, CenterX + 0.25, Fuzzy);
+    genCircle(&curves[0], radius, CenterX + 0.25, CenterY + 0.25, Fuzzy);
     ildaFrame.addPoly(curves[0]);
-    genCircle(&curves[1], radius, CenterX - 0.25, CenterX - 0.25, Fuzzy);
+    genCircle(&curves[1], radius, CenterX - 0.25, CenterY - 0.25, Fuzzy);
     ildaFrame.addPoly(curves[1]);
 }
 
 void auroraIlda1::drawScene3(){
+    ofSetColor(color2);
+    
+    float radius = 0.10 * scale;
+    
+    genCircle(&curves[0], radius, CenterX + 0.25, CenterY + 0.25, Fuzzy);
+    ildaFrame.addPoly(curves[0]);
+    genCircle(&curves[1], radius, CenterX - 0.25, CenterY - 0.25, Fuzzy);
+    ildaFrame.addPoly(curves[1]);
+    genCircle(&curves[2], radius, CenterX + 0.25, CenterY - 0.25, Fuzzy);
+    ildaFrame.addPoly(curves[2]);
+}
+
+void auroraIlda1::drawScene4(){
     ofSetColor(color3);
     
     int numCircles = 4;
@@ -149,8 +148,7 @@ void auroraIlda1::drawScene3(){
     }
 }
 
-void auroraIlda1::drawScene4(){
-}
+
 
 //simulate heartbeat
 void auroraIlda1::beat(){
@@ -206,12 +204,13 @@ void auroraIlda1::triggerAudioFor(int sceneNumber){
 //            cout << averageFft();
             break;
         case 3:
-            aviPlayer.play();
+            normPlayer.play();
             cout << "check avg once agin \n";
 //            cout << averageFft();
             break;
         case 4:
-            normPlayer.play();
+            
+            aviPlayer.play();
             cout << "check avg once \n";
 //            cout << averageFft();
             break;
@@ -220,6 +219,7 @@ void auroraIlda1::triggerAudioFor(int sceneNumber){
             break;
     }
 }
+
 
 float auroraIlda1::averageFft(){
     if (fftSmoothed){ cout << "true \n";}

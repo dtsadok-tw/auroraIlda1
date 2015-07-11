@@ -17,8 +17,8 @@ class auroraIlda1 : public ofBaseApp{
     ofColor white, color1, color2, color3, color4;
     int currentScene = 0;
 
-    const int sceneTimes[5] = {0, 1000, 3000, 6000, 9000};
-    const int LoopTime = 12000;
+    const int sceneTimes[5] = {0, 19000, 29000, 41000, 51000};
+    const int LoopTime = 1200000;
 
     const int HeartRate = 650, BeatLength = 20;
 
