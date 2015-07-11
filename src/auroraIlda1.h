@@ -80,4 +80,6 @@ class auroraIlda1 : public ofBaseApp{
     
     float averageFft();
     void keyReleased(int key);
+    
+    void exit();
 };

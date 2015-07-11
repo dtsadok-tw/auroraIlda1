@@ -14,10 +14,11 @@ void auroraIlda1::setup(){
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
     fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
     // fullSequenceBounce.setVolume(1.0f);
-    setupAudio();
 
-    sample.load("sounds/hi_res_w_hearts.wav");
-    sample.setLooping(false);
+    if (sample.load("sounds/hi_res_w_hearts.wav")) {
+        cout<< "sample has loaded" << endl;
+    }
+    sample.setLooping(true);
     // 0 output channels, 
     // 2 input channels
     // 44100 samples per second
@@ -46,6 +47,7 @@ void auroraIlda1::setup(){
     ofSoundStreamSetup(2,0,this, 44100,256, 4);
     
         sample.generateWaveForm(&waveForm);
+    setupAudio();
 
 
 }
@@ -137,10 +139,13 @@ void auroraIlda1::draw(){
 
     switch (currentScene) {
         case 1:
+            cout<< sample.getPosition() <<endl;
             drawScene1();
             break;
 
         case 2:
+            cout<< sample.getPosition() <<endl;
+
             drawScene2();
             break;
 
@@ -319,5 +324,14 @@ void auroraIlda1::audioIn(float * input, int bufferSize, int nChannels){
     bufferCounter++;
     
 }
+
+void auroraIlda1::exit(){
+    ofSoundStreamStop();
+    ofSoundStreamClose();
+//    delete lAudio;
+//    delete rAudio;
+    
+}
+
 
 
