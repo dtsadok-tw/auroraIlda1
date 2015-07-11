@@ -12,13 +12,16 @@ void auroraIlda1::setup(){
     color2 = ofColor(ofRandom( 128, 255 ), 64, 64 );
     color3 = ofColor(64, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
+    setupAudio();
 }
 
 void auroraIlda1::setupAudio(){
     
     fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
     fullSequenceBounce.setVolume(1.0f);
-    fullSequenceBounce.play();
+    cout << fullSequenceBounce.isLoaded();
+//    fullSequenceBounce.play();
+    
     aviPlayer.loadSound("sounds/Avi Heart#03.aif");
     aviPlayer.setVolume(1.0f);
     aviPlayer.setMultiPlay(true);
