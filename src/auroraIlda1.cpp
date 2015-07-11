@@ -12,13 +12,14 @@ void auroraIlda1::setup(){
     color2 = ofColor(ofRandom( 128, 255 ), 64, 64 );
     color3 = ofColor(64, ofRandom( 128, 255 ), ofRandom( 128, 255 ) );
     color4 = ofColor(64, 64, ofRandom( 128, 255 ) );
+    fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
+    fullSequenceBounce.setVolume(1.0f);
     setupAudio();
 }
 
 void auroraIlda1::setupAudio(){
-    
-    fullSequenceBounce.loadSound("sounds/hi_res_w_hearts.aif");
-    fullSequenceBounce.setVolume(1.0f);
+    fullSequenceBounce.play();
+    cout << "is lloadEd? ?";
     cout << fullSequenceBounce.isLoaded();
 //    fullSequenceBounce.play();
     
@@ -59,7 +60,7 @@ void auroraIlda1::update(){
 
     if (newScene != currentScene) //transition?
     {
-        triggerAudioFor(newScene);
+//        triggerAudioFor(newScene);
         currentScene = newScene;
     }
 
@@ -85,7 +86,6 @@ void auroraIlda1::draw(){
 
     switch (currentScene) {
         case 1:
-            fullSequenceBounce.play();
             drawScene1();
             break;
 
